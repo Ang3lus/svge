@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <chrono>
 #include <log4cplus/logger.h>
 
 namespace svge {
@@ -14,6 +15,8 @@ class Game {
  private:
   std::atomic_bool run_{false};
   log4cplus::Logger logger_;
+
+  void tick(const std::chrono::duration<float>& dt);
 };
 
 } // namespace game

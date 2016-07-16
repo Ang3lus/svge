@@ -17,8 +17,13 @@ int Game::start() {
 
   run_ = true;
 
+  auto last_frame_start = std::chrono::high_resolution_clock::now();
   while (run_) {
-    stop();
+    auto frame_start = std::chrono::high_resolution_clock::now();
+
+    tick(frame_start - last_frame_start);
+
+    last_frame_start = frame_start;
   }
 
   return EXIT_SUCCESS;
@@ -27,6 +32,10 @@ int Game::start() {
 void Game::stop() {
   LOG4CPLUS_INFO(logger_, LOG4CPLUS_TEXT("Game stop"));
   run_ = false;
+}
+
+void Game::tick(const std::chrono::duration<float>& dt) {
+  stop();
 }
 
 } // namespace game
