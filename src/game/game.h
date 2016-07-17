@@ -1,8 +1,9 @@
 #pragma once
 
 #include <atomic>
-#include <log4cplus/logger.h>
 #include <unordered_map>
+#include <memory>
+#include <functional>
 #include <typeindex>
 #include <type_traits>
 #include "core/time.h"
@@ -30,12 +31,12 @@ class Game {
   }
  private:
   std::atomic_bool run_{false};
-  log4cplus::Logger logger_;
-
-  void tick(const core::time::Delta& dt);
   std::unordered_map<std::type_index, std::unique_ptr<scene::Scene>> scenes_;
   scene::Scene* active_scene_ = nullptr;
   std::function<std::unique_ptr<scene::Scene>()> create_next_scene_;
+
+  void tick(const core::time::Delta& dt);
+  void change_scene_if_needed();
 };
 
 } // namespace game

@@ -1,52 +1,41 @@
 #include "game.h"
 #include <cstdlib>
-#include <log4cplus/loggingmacros.h>
+#include "third_party/easylogging/easylogging++.h"
 #include "scene/scene.h"
+#include "scene/gameplay.h"
+
+INITIALIZE_EASYLOGGINGPP
 
 namespace svge {
 namespace game {
 
-Game::Game(int argc, char* argv[]) : logger_(log4cplus::Logger::getInstance(LOG4CPLUS_TEXT("Game"))) {
-  LOG4CPLUS_INFO(logger_, LOG4CPLUS_TEXT("Creating game, bin path: ") << LOG4CPLUS_TEXT(argv[0]));
+Game::Game(int argc, char* argv[]) {
+  START_EASYLOGGINGPP(argc, argv);
+  el::Configurations default_config;
+  default_config.setToDefault();
+  default_config.setGlobally(el::ConfigurationType::Format, "%fbase %line %func %msg");
+  el::Loggers::setDefaultConfigurations(default_config, true);
 }
 
 // Just to make compiler happy about all forward declarations
 Game::~Game() {}
 
 int Game::start() {
-  LOG4CPLUS_INFO(logger_, LOG4CPLUS_TEXT("Game start"));
+  LOG(INFO);
+
   if (run_) {
     return EXIT_SUCCESS;
   }
 
   run_ = true;
-
   auto last_frame_start = core::time::now();
+
+  go_to_scene<scene::Gameplay>();
+
   while (run_) {
     auto frame_start = core::time::now();
-
+    change_scene_if_needed();
     tick(frame_start - last_frame_start);
-
-    if (create_next_scene_) {
-      auto next_scene_uptr = create_next_scene_();
-      create_next_scene_ = nullptr;
-
-      // If we do just typeid(*next_scene_uptr) then clang complains:
-      // expression with side effects will be evaluated despite being used as an operand to 'typeid'
-      const scene::Scene& next_scene = *next_scene_uptr;
-      const auto& scene_id = typeid(next_scene);
-
-      active_scene_->exit();
-      if (0 == scenes_.count(scene_id)) {
-        scenes_[scene_id] = std::move(next_scene_uptr);
-        active_scene_ = next_scene_uptr.get();
-        active_scene_->load();
-      } else {
-        active_scene_ = scenes_[scene_id].get();
-      }
-      active_scene_->enter();
-    }
-
     last_frame_start = frame_start;
   }
 
@@ -54,7 +43,8 @@ int Game::start() {
 }
 
 void Game::stop() {
-  LOG4CPLUS_INFO(logger_, LOG4CPLUS_TEXT("Game stop"));
+  LOG(INFO);
+
   run_ = false;
 }
 
@@ -64,6 +54,30 @@ void Game::tick(const std::chrono::duration<float>& dt) {
     active_scene_->render(dt);
   }
   stop();
+}
+
+void Game::change_scene_if_needed() {
+  if (create_next_scene_) {
+    auto next_scene_uptr = create_next_scene_();
+    create_next_scene_ = nullptr;
+
+    // If we do just typeid(*next_scene_uptr) then clang complains:
+    // expression with side effects will be evaluated despite being used as an operand to 'typeid'
+    const scene::Scene& next_scene = *next_scene_uptr;
+    const auto& scene_id = typeid(next_scene);
+
+    if (active_scene_) {
+      active_scene_->exit();
+    }
+    if (0 == scenes_.count(scene_id)) {
+      active_scene_ = next_scene_uptr.get();
+      scenes_[scene_id] = std::move(next_scene_uptr);
+      active_scene_->load();
+    } else {
+      active_scene_ = scenes_[scene_id].get();
+    }
+    active_scene_->enter();
+  }
 }
 
 } // namespace game
