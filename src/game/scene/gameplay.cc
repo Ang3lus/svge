@@ -7,6 +7,9 @@ namespace scene {
 
 void Gameplay::load() {
   LOG(INFO);
+  for (int i = -5; i < 5; ++i) {
+    voxels_.push_back({glm::vec3(i, 0, 0), glm::vec4(0, 1, 0, 1)});
+  }
 }
 
 void Gameplay::enter() {

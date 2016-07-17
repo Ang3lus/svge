@@ -1,6 +1,8 @@
 #pragma once
 
+#include <vector>
 #include "scene.h"
+#include "game/voxel.h"
 
 namespace svge {
 namespace game {
@@ -13,6 +15,8 @@ class Gameplay : public Scene {
   void exit() override;
   void update(const core::time::Delta& dt) override;
   void render(const core::time::Delta& dt) override;
+ private:
+  std::vector<Voxel> voxels_;
 };
 
 } // namespace scene
