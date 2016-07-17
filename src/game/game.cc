@@ -9,12 +9,22 @@ INITIALIZE_EASYLOGGINGPP
 namespace svge {
 namespace game {
 
+namespace {
+class Init {
+ public:
+  Init() {
+    el::Configurations default_config;
+    default_config.setToDefault();
+    default_config.setGlobally(el::ConfigurationType::Format, "%fbase %line %func %msg");
+    el::Loggers::setDefaultConfigurations(default_config, true);
+    LOG(INFO);
+  }
+};
+} // namespace;
+
 Game::Game(int argc, char* argv[]) {
+  static Init init;
   START_EASYLOGGINGPP(argc, argv);
-  el::Configurations default_config;
-  default_config.setToDefault();
-  default_config.setGlobally(el::ConfigurationType::Format, "%fbase %line %func %msg");
-  el::Loggers::setDefaultConfigurations(default_config, true);
 }
 
 // Just to make compiler happy about all forward declarations

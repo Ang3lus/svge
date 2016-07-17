@@ -1,4 +1,9 @@
 Simple Voxel Game Engine
 
-How to build?
-Just use CMake
+How to build and run?
+* mkdir build_svge && cd build_svge
+* cmake some_path/svge.
+* make install
+* cd install
+* ./run.sh
+

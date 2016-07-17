@@ -7,6 +7,7 @@
 #include <typeindex>
 #include <type_traits>
 #include "core/time.h"
+#include "video.h"
 
 namespace svge {
 namespace game {
@@ -34,6 +35,7 @@ class Game {
   std::unordered_map<std::type_index, std::unique_ptr<scene::Scene>> scenes_;
   scene::Scene* active_scene_ = nullptr;
   std::function<std::unique_ptr<scene::Scene>()> create_next_scene_;
+  Video video_;
 
   void tick(const core::time::Delta& dt);
   void change_scene_if_needed();
