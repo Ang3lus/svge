@@ -6,6 +6,7 @@
 #include <functional>
 #include <typeindex>
 #include <type_traits>
+#include "core/init.h"
 #include "core/time.h"
 #include "video.h"
 
@@ -18,7 +19,7 @@ class Scene;
 
 class Game {
  public:
-  Game(int argc, char* argv[]);
+  Game(std::unique_ptr<core::Init> init);
   ~Game();
   int start();
   void stop();
@@ -31,6 +32,7 @@ class Game {
     };
   }
  private:
+  std::unique_ptr<core::Init> init_;
   std::atomic_bool run_{false};
   std::unordered_map<std::type_index, std::unique_ptr<scene::Scene>> scenes_;
   scene::Scene* active_scene_ = nullptr;

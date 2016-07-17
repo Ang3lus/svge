@@ -1,2 +1,7 @@
 #!/usr/bin/env bash
-LSAN_OPTIONS=suppressions=sanitizers/leak.supp ./bin/svge
+
+pushd `dirname $0` > /dev/null
+SCRIPTPATH=`pwd -P`
+popd > /dev/null
+
+LSAN_OPTIONS=suppressions=$SCRIPTPATH/sanitizers/leak.supp $SCRIPTPATH/bin/svge

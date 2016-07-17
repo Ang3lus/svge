@@ -15,6 +15,7 @@ include_directories(src)
 
 set(SVGE_SRCS
     src/main.cc
+    src/core/init.cc
     src/core/time.cc
     src/game/game.cc
     src/game/video.cc
