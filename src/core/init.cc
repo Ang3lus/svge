@@ -1,6 +1,6 @@
 #include "init.h"
 
-#include <GLFW/glfw3.h>
+#include <SDL.h>
 #include "third_party/easylogging/easylogging++.h"
 #include "exception.h"
 
@@ -16,14 +16,14 @@ Init::Init(int argc, char* argv[]) : argc_(argc), argv_(argv) {
   default_config.setGlobally(el::ConfigurationType::Format, "%fbase %line %func %msg");
   el::Loggers::setDefaultConfigurations(default_config, true);
 
-  if (!glfwInit()) {
-    throw InitFailed("GLFW intialization failed");
+  if (SDL_Init(0)) {
+    throw InitFailed("SDL2 intialization failed");
   }
   LOG(INFO);
 }
 
 Init::~Init() {
-  glfwTerminate();
+  SDL_Quit();
   LOG(INFO);
 }
 
