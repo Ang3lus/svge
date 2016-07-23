@@ -9,6 +9,7 @@
 #include "core/init.h"
 #include "core/time.h"
 #include "video.h"
+#include "events.h"
 
 namespace svge {
 namespace game {
@@ -38,6 +39,7 @@ class Game {
   scene::Scene* active_scene_ = nullptr;
   std::function<std::unique_ptr<scene::Scene>()> create_next_scene_;
   Video video_;
+  Events events_;
 
   void tick(const core::time::Delta& dt);
   void change_scene_if_needed();

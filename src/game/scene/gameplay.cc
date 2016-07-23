@@ -21,11 +21,11 @@ void Gameplay::exit() {
 }
 
 void Gameplay::update(const core::time::Delta& dt) {
-  LOG(INFO);
+  LOG_AFTER_N(60, INFO) << "60 updates done";
 }
 
 void Gameplay::render(const core::time::Delta& dt) {
-  LOG(INFO);
+  LOG_AFTER_N(120, INFO) << "120 renderings done";
 }
 
 } // namespace scene

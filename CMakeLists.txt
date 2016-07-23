@@ -11,16 +11,20 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=leak")
 
 find_package(glm REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(OpenGL REQUIRED)
 
 include_directories(src ${GLM_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS})
 
 set(SVGE_SRCS
     src/main.cc
     src/core/init.cc
+    src/core/opengl_helpers.cc
     src/core/time.cc
+    src/game/events.cc
     src/game/game.cc
     src/game/video.cc
     src/game/scene/gameplay.cc
+    src/third_party/glLoadGen/gl_core_3_3.c
 )
 
 add_executable(svge ${SVGE_SRCS})
@@ -31,7 +35,7 @@ add_executable(svge ${SVGE_SRCS})
 # That is why we are passing this to the CXX_FLAGS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SDL2_LIBRARIES}")
 
-target_link_libraries(svge)
+target_link_libraries(svge ${OPENGL_gl_LIBRARY})
 
 
 set(SVGE_INSTALL_DIR "${CMAKE_BINARY_DIR}/install")

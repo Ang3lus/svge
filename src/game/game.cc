@@ -45,7 +45,18 @@ void Game::tick(const std::chrono::duration<float>& dt) {
     active_scene_->update(dt);
     active_scene_->render(dt);
   }
-  stop();
+
+  video_.render();
+  video_.swap_buffers();
+
+  {
+    Events::Event event;
+    while (events_.poll(event)) {
+      if (Events::Event::Type::kQuit == event.type) {
+        stop();
+      }
+    }
+  }
 }
 
 void Game::change_scene_if_needed() {
