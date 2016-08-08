@@ -13,5 +13,17 @@ class SDLCallFailed : public std::runtime_error {
   using std::runtime_error::runtime_error;
 };
 
+class ShaderCompilationFailed : public std::runtime_error {
+  using std::runtime_error::runtime_error;
+};
+
+class ProgramLinkFailed : public std::runtime_error {
+  using std::runtime_error::runtime_error;
+};
+
+class FailedToGetUniformLocation : public std::runtime_error {
+  using std::runtime_error::runtime_error;
+};
+
 } // namespace core
 } // namespace svge

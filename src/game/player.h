@@ -7,8 +7,9 @@ namespace svge {
 namespace game {
 
 struct Player {
-  glm::vec3 postion;
+  glm::vec3 position;
   glm::quat rotation;
+  const float kHeight = 2;
 };
 
 } // namespace game

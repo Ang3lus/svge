@@ -25,8 +25,6 @@ class Events {
   ~Events();
 
   bool poll(Event& event);
- private:
-  std::vector<Event> events_;
 };
 
 } // namespace game

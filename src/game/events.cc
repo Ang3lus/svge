@@ -18,15 +18,14 @@ Events::~Events() {
 bool Events::poll(Event& event) {
   SDL_Event sdl_event;
 
-  if (SDL_PollEvent(&sdl_event)) {
+  while (SDL_PollEvent(&sdl_event)) {
     switch (sdl_event.type) {
       case SDL_QUIT:
         event.type = Event::Type::kQuit;
-        break;
+        return true;
       default:
-        return false;
+        continue;
     }
-    return true;
   }
 
   return false;
